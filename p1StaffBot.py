@@ -35,7 +35,11 @@ _PERCENTAGE = 0.2
 
 class PickyStaffAgent(CaptureAgent):
   """
+<<<<<<< HEAD
   This is the Staff bot intended for Phase 1.
+=======
+  This is the Staff bot intended for Phase 2.
+>>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
   The bot will randomly choose a subset of food to capture. 
   Unlike in Phase 1, you will no longer have access to its plan.
 
@@ -99,6 +103,20 @@ class PickyStaffAgent(CaptureAgent):
 
     foodLeft = len(gameState.getFood().asList())
 
+<<<<<<< HEAD
+=======
+    if foodLeft <= 2:
+      bestDist = 9999
+      for action in actions:
+        successor = self.getSuccessor(gameState, action)
+        pos2 = successor.getAgentPosition(self.index)
+        dist = self.getMazeDistance(self.start,pos2)
+        if dist < bestDist:
+          bestAction = action
+          bestDist = dist
+      return bestAction
+
+>>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
     return random.choice(bestActions)
 
   def getSuccessor(self, gameState, action):

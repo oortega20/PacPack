@@ -4,13 +4,13 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
-# This file was based on the starter code for student bots, and refined 
+# This file was based on the starter code for student bots, and refined
 # by Mesut (Xiaocheng) Yang
 
 
@@ -41,9 +41,9 @@ class myAgentP3(CaptureAgent):
     IMPORTANT: This method may run for at most 15 seconds.
     """
 
-    # Make sure you do not delete the following line. 
-    # If you would like to use Manhattan distances instead 
-    # of maze distances in order to save on initialization 
+    # Make sure you do not delete the following line.
+    # If you would like to use Manhattan distances instead
+    # of maze distances in order to save on initialization
     # time, please take a look at:
     # CaptureAgent.registerInitialState in captureAgents.py.
     CaptureAgent.registerInitialState(self, gameState)
@@ -54,7 +54,7 @@ class myAgentP3(CaptureAgent):
     Picks among actions randomly.
     """
     teammateActions = self.receivedBroadcast
-    # Process your teammate's broadcast! 
+    # Process your teammate's broadcast!
     # Use it to pick a better action for yourself
 
     actions = gameState.getLegalActions(self.index)

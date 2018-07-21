@@ -39,7 +39,11 @@ _PERCENTAGE = 0.4
 
 class PlannedStaffAgent(CaptureAgent):
   """
+<<<<<<< HEAD
   This is the Staff bot intended for Phase 2.
+=======
+  This is the Staff bot intended for Phase 1.
+>>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
   The bot will pick a plan up to _LIMIT steps, and your bot will recieve this information.
   The plan will be very useful to your cooperation. Please make good use of this
 

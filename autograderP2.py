@@ -705,6 +705,7 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
   
   print ""
   print "Preliminary Autograder Results:"
+<<<<<<< HEAD
   passedCount = 0
   # Output
   for i, game in enumerate(games): 
@@ -723,6 +724,18 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
   print  "Summary: ", passedCount, "/", len(LAYOUT_SEED), "reached target"
   if passedCount >= 7:
     print "You should move on to the next phase! This should be enough to get you full credit!"
+=======
+  passed = 0
+  # Output
+  for i, game in enumerate(games): 
+    myTime = game.length - game.state.data.timeleft
+    targetTime = baselineScores[i]
+    if myTime < targetTime:
+      passed += 1
+    print "Game", i, ": ", "-l RANDOM%d  "%LAYOUT_SEED[i], "\tTime taken:", myTime, "\tTarget time:", targetTime
+  print  "Summary: ", passed, "/", len(LAYOUT_SEED), "reached target"
+
+>>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
   return games
 
 

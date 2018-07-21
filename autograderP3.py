@@ -703,6 +703,7 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
     print ""
     if not beQuiet: games.append(g)
   
+<<<<<<< HEAD
   #Now, reverse the index on the team, and run the games again
   # temp = agents[1]
   # agents[1] = agents[0]
@@ -760,6 +761,53 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
   
   print  "Summary: ", passedCount, "/", len(LAYOUT_SEED), "reached target"
   return games #+ reversedGames
+=======
+
+
+  #Now, reverse the index on the team, and run the games again
+
+  temp = agents[1]
+  agents[1] = agents[0]
+  agents[0] = temp
+
+  reversedGames = []
+
+  for i, l in enumerate(layouts):
+    beQuiet = i < numTraining
+    if beQuiet:
+        # Suppress output and graphics
+        import textDisplay
+        gameDisplay = textDisplay.NullGraphics()
+        rules.quiet = True
+    else:
+        gameDisplay = display
+        rules.quiet = False
+    g = rules.newGame( l, agents, gameDisplay, length, muteAgents, catchExceptions )
+    g.run()
+    if not beQuiet: reversedGames.append(g)
+  
+  print ""
+  print "Preliminary Phase 3 Autograder Results:"
+  passed = 0
+  # Output
+  print "Regular order"
+  for i, game in enumerate(games): 
+    myTime = game.length - game.state.data.timeleft
+    targetTime = baselineScores[i]
+    if myTime < targetTime:
+      passed += 1
+    print "Game", i, ": ", "-l RANDOM%d  "%LAYOUT_SEED[i], "\tTime taken:", myTime, "\tTarget time:", targetTime
+  
+  print "Reversed order"
+  for i, game in enumerate(reversedGames): 
+    myTime = game.length - game.state.data.timeleft
+    targetTime = baselineScores[i]
+    if myTime < targetTime:
+      passed += 1
+    print "Game", i, ": ", "-l RANDOM%d  "%LAYOUT_SEED[i], "\tTime taken:", myTime, "\tTarget time:", targetTime
+  print  "Summary: ", passed, "/", 2*len(LAYOUT_SEED), "reached target"
+  return games + reversedGames
+>>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
 
 
 
