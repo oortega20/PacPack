@@ -4,21 +4,14 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-<<<<<<< HEAD
 #
-=======
-# 
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
-<<<<<<< HEAD
 # This file was based on the starter code for student bots, and refined
-=======
-# This file was based on the starter code for student bots, and refined 
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
+# This file was based on the starter code for student bots, and refined
 # by Mesut (Xiaocheng) Yang
 
 
@@ -51,15 +44,9 @@ class myAgentP1(CaptureAgent):
     IMPORTANT: This method may run for at most 15 seconds.
     """
 
-<<<<<<< HEAD
     # Make sure you do not delete the following line.
     # If you would like to use Manhattan distances instead
     # of maze distances in order to save on initialization
-=======
-    # Make sure you do not delete the following line. 
-    # If you would like to use Manhattan distances instead 
-    # of maze distances in order to save on initialization 
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
     # time, please take a look at:
     # CaptureAgent.registerInitialState in captureAgents.py.
     CaptureAgent.registerInitialState(self, gameState)
@@ -77,26 +64,16 @@ class myAgentP1(CaptureAgent):
     # print 'eval time for agent %d: %.4f' % (self.index, time.time() - start)
 
     # INSERT YOUR LOGIC HERE
-<<<<<<< HEAD
     best = 0
     bestAction = actions[0]
     for i in range(0, len(values)):
-        #print("the value of move: ")
-        #print(actions[i])
-        #print(" ")
-        #print(values[i])
         if values[i] > best:
-        #    print("best action is:" )
-        #    print(actions[i])
+
             bestAction = actions[i]
             best = values[i]
 
     return bestAction
-    #return random.choice(actions)
-=======
 
-    return random.choice(actions)
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
 
   def evaluate(self, gameState, action):
     """
@@ -115,11 +92,6 @@ class myAgentP1(CaptureAgent):
     oldFood = gameState.getFood()
     newFood = successorGameState.getFood()
     ghostIndices = self.getOpponents(successorGameState)
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
     # Determines how many times the agent has already been in the newPosition in the last 20 moves
     numRepeats = sum([1 for x in self.observationHistory[-20:] if x.getAgentPosition(self.index) == newPos])
 
@@ -143,22 +115,14 @@ class myAgentP1(CaptureAgent):
     features['successorScore'] = self.getScore(successorGameState)
 
     # CHANGE YOUR FEATURES HERE
-<<<<<<< HEAD
     features['closestFood'] = closestFood
     features['closestGhost'] = closestGhost
     features['numRepeats'] = numRepeats
     features['teammateDistance'] = teammateDistance
-=======
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
 
     return features
 
   def getWeights(self, gameState, action):
     # CHANGE YOUR WEIGHTS HERE
-<<<<<<< HEAD
-    #return {'successorScore': 100}
     return {'successorScore': 100, 'closestFood': -20, 'closestGhost': 0, 'numRepeats': -5,
     'teammateDistance': 10}
-=======
-    return {'successorScore': 100}
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5

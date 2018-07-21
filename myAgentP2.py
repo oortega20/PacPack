@@ -4,21 +4,15 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-<<<<<<< HEAD
 #
-=======
-# 
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
-<<<<<<< HEAD
 # This file was based on the starter code for student bots, and refined
-=======
-# This file was based on the starter code for student bots, and refined 
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
+# This file was based on the starter code for student bots, and refined
 # by Mesut (Xiaocheng) Yang
 
 
@@ -51,15 +45,12 @@ class myAgentP2(CaptureAgent):
     IMPORTANT: This method may run for at most 15 seconds.
     """
 
-<<<<<<< HEAD
     # Make sure you do not delete the following line.
     # If you would like to use Manhattan distances instead
     # of maze distances in order to save on initialization
-=======
-    # Make sure you do not delete the following line. 
-    # If you would like to use Manhattan distances instead 
-    # of maze distances in order to save on initialization 
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
+    # Make sure you do not delete the following line.
+    # If you would like to use Manhattan distances instead
+    # of maze distances in order to save on initialization
     # time, please take a look at:
     # CaptureAgent.registerInitialState in captureAgents.py.
     CaptureAgent.registerInitialState(self, gameState)
@@ -70,14 +61,11 @@ class myAgentP2(CaptureAgent):
     assert len(teammateIndices) == 1
     teammateIndex = teammateIndices[0]
     otherAgentPositions = getFuturePositions(gameState, otherAgentActions, teammateIndex)
-<<<<<<< HEAD
 
     # You can process the broadcast here!
-    
-=======
-    
+
+
     # You can process the broadcast here!
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
 
   def chooseAction(self, gameState):
     """
@@ -107,8 +95,4 @@ def getFuturePositions(gameState, plannedActions, agentIndex):
     else:
       print("Action list contained illegal actions")
       break
-<<<<<<< HEAD
   return planPositions
-=======
-  return planPositions
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
