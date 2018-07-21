@@ -28,7 +28,13 @@ from util import nearestPoint
 
 class myAgentP1(CaptureAgent):
   """
-  YOUR DESCRIPTION HERE
+  Students' Names: Yuchen Hua, Oscar Ortega
+  Phase Number: 1
+  Description of Bot: A PacMan agent that uses the the position of the nearest food, the number of times
+  it has revisited the same space, and the score fo the successor state to determine the best action.
+  Weights are assigned to minimize nearest food and number of times a single space is revisited, while
+  maximizing the succesor state's score.
+      pass
   """
 
   def registerInitialState(self, gameState):
