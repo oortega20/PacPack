@@ -29,7 +29,12 @@ from util import nearestPoint
 
 class myAgentP2(CaptureAgent):
   """
-  YOUR DESCRIPTION HERE
+  Students' Names: Yuchen Hua
+  Phase Number: 2
+  Description of Bot: We used the weights and features from Phase 1, with a slight difference in how
+  the closest food was calculated. Taking into account the other agent's policy, we found the distance
+  from our position to the nearest food that was either not in the other agent's list or was in the second
+  half of the other agent's list.   
   """
 
   def registerInitialState(self, gameState):
