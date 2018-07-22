@@ -64,17 +64,24 @@ class myAgentP2(CaptureAgent):
 
     # You can process the broadcast here!
     #iterat through other agent positions -- if he picks up food, you dont need to go to those spaces
-    friend= []
-    foodPos = gameState.getFood()
+    self.friend = []
+    self.size = 0
+    self.friendsize = 0
+    i = 0
+    foodPos = gameState.getFood().asList()
     for i in otherAgentPositions:
         if i in foodPos:
-            friend.append(i)
+            self.friend.append(i)
+            self.friendsize += 1
+            #self.size += 1
     #friend is an array showing which food pellets the other agent eats
-
-    myFood = []
+    self.myFood = []
     for i in foodPos:
-        if i not in friend:
-            myFood.append(i)
+        if i not in self.friend:
+            #print(i)
+            self.myFood.append(i)
+            self.size += 1
+
     #myFood is the food pellets im going to go after
     # You can process the broadcast here!
 
@@ -83,8 +90,84 @@ class myAgentP2(CaptureAgent):
     Picks among actions randomly.
     """
     actions = gameState.getLegalActions(self.index)
+    values = [self.evaluate(gameState, a) for a in actions]
+    best = -99999999999
+    bestAction = actions[0]
+    for i in range(0, len(values)):
+        if values[i] > best:
+            #print(bestAction)
+            bestAction = actions[i]
+            best = values[i]
 
-    return random.choice(actions)
+    return bestAction
+    #return random.choice(actions)
+
+  def getFeatures(self, gameState, action):
+    features = util.Counter()
+    successorGameState = gameState.generateSuccessor(self.index, action)
+    newPos = successorGameState.getAgentPosition(self.index)
+    newFood = successorGameState.getFood() #figure this out later
+    oldFood = gameState.getFood()
+    ghostIndices = self.getOpponents(successorGameState)
+
+    numRepeats = sum([1 for x in self.observationHistory[-20:] if x.getAgentPosition(self.index) == newPos])
+    foodPositions = []
+    for i in oldFood.asList():
+        if i in self.friend[(self.friendsize/2) :] or i not in self.friend:
+            foodPositions.append(i)
+    foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
+    if len(foodDistances) == 0:
+        foodPositions = oldFood.asList()
+        foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
+    closestFood = min(foodDistances) + 1
+
+
+    #if self.size > 0:
+    #    foodPositions = self.myFood
+    #    foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
+    #    closestFood = min( foodDistances ) + 1.0
+    #else:
+        #foodPositions = oldFood.asList()
+        #foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
+        #closestFood = min(foodDistances) + 1.0
+    #closestFood = self.getMazeDistance(newPos, self.friend[self.friendsize - 1]) + 1.0
+        #self.friendsize -= 1
+
+    ghostPositions = [successorGameState.getAgentPosition(ghostIndex) for ghostIndex in ghostIndices]
+    ghostDistances = [self.getMazeDistance(newPos, ghostPosition) for ghostPosition in ghostPositions]
+    ghostDistances.append( 1000 )
+    closestGhost = min( ghostDistances ) + 1.0
+
+    teammateIndices = [index for index in self.getTeam(gameState) if index != self.index]
+    assert len(teammateIndices) == 1, "Teammate indices: {}".format(self.getTeam(gameState))
+    teammateIndex = teammateIndices[0]
+    teammatePos = successorGameState.getAgentPosition(teammateIndex)
+    teammateDistance = self.getMazeDistance(newPos, teammatePos) + 1.0
+
+    pacmanDeath = successorGameState.data.num_deaths
+
+    features['successorScore'] = self.getScore(successorGameState)
+
+    features['closestFood'] = closestFood
+    features['closestGhost'] = closestGhost
+    features['numRepeats'] = numRepeats
+    features['teammateDistance'] = teammateDistance
+
+    features['interference'] = 15
+        #features['interference'] = -10
+
+
+    return features
+
+  def getWeights(self, gameState, action):
+        # CHANGE YOUR WEIGHTS HERE
+    return {'successorScore': 100, 'closestFood': -20, 'closestGhost': 0, 'numRepeats': -5,
+    'teammateDistance': 10}
+
+  def evaluate(self, gameState, action):
+    features = self.getFeatures(gameState, action)
+    weights = self.getWeights(gameState, action)
+    return features * weights
 
 
 
@@ -109,39 +192,3 @@ def getFuturePositions(gameState, plannedActions, agentIndex):
       print("Action list contained illegal actions")
       break
   return planPositions
-
-
-  def getFeatures(self, gamestate, action):
-      features = util.Counter()
-      successorGameState = gameState.generateSuccessor(self.index, action)
-      newPos = successorGameState.getAgentPosition(self.index)
-      newFood = successorGameState.getFood() #figure this out later
-      oldFood = gameState.getFood()
-      ghostIndices = self.getOpponents(successorGameState)
-
-      numRepeats = sum([1 for x in self.observationHistory[-20:] if x.getAgentPosition(self.index) == newPos])
-      foodPositions = myFood
-      foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
-      closestFood = min( foodDistances ) + 1.0
-
-      ghostPositions = [successorGameState.getAgentPosition(ghostIndex) for ghostIndex in ghostIndices]
-      ghostDistances = [self.getMazeDistance(newPos, ghostPosition) for ghostPosition in ghostPositions]
-      ghostDistances.append( 1000 )
-      closestGhost = min( ghostDistances ) + 1.0
-
-      teammateIndices = [index for index in self.getTeam(gameState) if index != self.index]
-      assert len(teammateIndices) == 1, "Teammate indices: {}".format(self.getTeam(gameState))
-      teammateIndex = teammateIndices[0]
-      teammatePos = successorGameState.getAgentPosition(teammateIndex)
-      teammateDistance = self.getMazeDistance(newPos, teammatePos) + 1.0
-
-      pacmanDeath = successorGameState.data.num_deaths
-
-      features['successorScore'] = self.getScore(successorGameState)
-
-      features['closestFood'] = closestFood
-      features['closestGhost'] = closestGhost
-      features['numRepeats'] = numRepeats
-      features['teammateDistance'] = teammateDistance
-      
-      return features

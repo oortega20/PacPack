@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # mazeGenerator.py
 # ----------------
 # Licensing Information: Please do not distribute or publish solutions to this
@@ -264,7 +264,6 @@ if __name__ == '__main__':
   if len(sys.argv) > 1:
     seed = int(sys.argv[1])
   print generateMaze(seed)
-=======
 # mazeGenerator.py
 # ----------------
 # Licensing Information: Please do not distribute or publish solutions to this
@@ -530,4 +529,3 @@ if __name__ == '__main__':
   if len(sys.argv) > 1:
     seed = int(sys.argv[1])
   print generateMaze(seed)
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
