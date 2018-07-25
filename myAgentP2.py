@@ -122,16 +122,6 @@ class myAgentP2(CaptureAgent):
     closestFood = min(foodDistances) + 1
 
 
-    #if self.size > 0:
-    #    foodPositions = self.myFood
-    #    foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
-    #    closestFood = min( foodDistances ) + 1.0
-    #else:
-        #foodPositions = oldFood.asList()
-        #foodDistances = [self.getMazeDistance(newPos, foodPosition) for foodPosition in foodPositions]
-        #closestFood = min(foodDistances) + 1.0
-    #closestFood = self.getMazeDistance(newPos, self.friend[self.friendsize - 1]) + 1.0
-        #self.friendsize -= 1
 
     ghostPositions = [successorGameState.getAgentPosition(ghostIndex) for ghostIndex in ghostIndices]
     ghostDistances = [self.getMazeDistance(newPos, ghostPosition) for ghostPosition in ghostPositions]

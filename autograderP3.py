@@ -277,8 +277,8 @@ class GameState:
   def isPacman(self, configOrPos):
     """
     Returns whether the passed in position is the starting
-    point of a pacman or a ghost. The convention is that pacman 
-    agents start on the left and ghosts on the right side 
+    point of a pacman or a ghost. The convention is that pacman
+    agents start on the left and ghosts on the right side
     of the board.
     """
     width = self.data.layout.width
@@ -331,7 +331,7 @@ class CaptureRules:
       game.gameOver = True
       if not game.rules.quiet:
         foodToWin = TOTAL_FOOD - MIN_FOOD
-        
+
         food_remaining = state.getFood().count()
         food_eaten = TOTAL_FOOD - food_remaining
         if food_remaining <= MIN_FOOD: # PackPac has eaten all the dots its supposed to
@@ -423,12 +423,12 @@ class AgentRules:
       # Score increase when one pellet is eaten
       score = 1
 
-      # do all the score and food grid maintainenace 
+      # do all the score and food grid maintainenace
       state.data.scoreChange += score
       state.data.food = state.data.food.copy()
       state.data.food[x][y] = False
       state.data._foodEaten = position
-      
+
       # Set state to win
       if (state.getFood().count() == MIN_FOOD):
        state.data._isOver = True
@@ -455,7 +455,7 @@ class AgentRules:
           state.data.scoreChange += score
           agentState.isPacman = True
           agentState.configuration = agentState.start
-          
+
     else: # Agent is a ghost
       for index in otherTeam:
         otherAgentState = state.data.agentStates[index]
@@ -470,7 +470,7 @@ class AgentRules:
           state.data.scoreChange += score
           otherAgentState.isPacman = False
           otherAgentState.configuration = otherAgentState.start
-          
+
   checkDeath = staticmethod( checkDeath )
 
   def placeGhost(state, ghostState):
@@ -508,7 +508,7 @@ def readCommand( argv ):
               (2) python capture.py --keys0
                   - starts a two-player interactive game where the arrow keys control agent 0, and all other agents are baseline agents
               (3) python capture.py -p baselineTeam -b myTeam
-                  - starts a fully automated game where the pacman team is a baseline team and ghost team is myTeam 
+                  - starts a fully automated game where the pacman team is a baseline team and ghost team is myTeam
   """
   # TODO: Update above according to final defaults
   parser = OptionParser(usageStr)
@@ -550,7 +550,7 @@ def readCommand( argv ):
                     help='Replays a recorded game file.')
   # TODO: This currently doesn't work, consider removing or fixing
   parser.add_option('-x', '--numTraining', dest='numTraining', type='int',
-                    help=default('How many episodes are training (suppresses output)'), default=0) 
+                    help=default('How many episodes are training (suppresses output)'), default=0)
   parser.add_option('-c', '--catchExceptions', action='store_true', default=True,
                     help='Catch exceptions and enforce time limits')
 
@@ -686,7 +686,7 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
 
   if numTraining > 0:
     print 'Playing %d training games' % numTraining
-  
+
   for i, l in enumerate(layouts):
     beQuiet = i < numTraining
     if beQuiet:
@@ -702,8 +702,7 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
     g.run()
     print ""
     if not beQuiet: games.append(g)
-  
-<<<<<<< HEAD
+
   #Now, reverse the index on the team, and run the games again
   # temp = agents[1]
   # agents[1] = agents[0]
@@ -724,13 +723,13 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
   #   g = rules.newGame( l, agents, gameDisplay, length, muteAgents, catchExceptions )
   #   g.run()
   #   if not beQuiet: reversedGames.append(g)
-  
+
   print ""
   print "Preliminary Phase 3 Autograder Results:"
   passedCount = 0
   # Output
   print "Regular order"
-  for i, game in enumerate(games): 
+  for i, game in enumerate(games):
     if game.agentCrashed:
       myTime = 99999999
     else:
@@ -743,9 +742,9 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
     else:
       currPassed = False
     print "Game {}: -l RANDOM{} \tTime taken: {} \tTarget time: {} \t {} \t{}".format(i, LAYOUT_SEED[i], myTime, targetTime, "AGENT CRASHED" if game.agentCrashed else "", "" if currPassed else " (NOT PASSED)")
-  
+
   # print "Reversed order"
-  # for i, game in enumerate(reversedGames): 
+  # for i, game in enumerate(reversedGames):
   #   if game.agentCrashed:
   #     myTime = 99999999
   #   else:
@@ -758,10 +757,9 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
   #   else:
   #     currPassed = False
   #   print "Game {}: -l RANDOM{} \tTime taken: {} \tTarget time: {} \t {} \t{}".format(i, LAYOUT_SEED[i], myTime, targetTime, "AGENT CRASHED" if game.agentCrashed else "", "" if currPassed else " (NOT PASSED)")
-  
+
   print  "Summary: ", passedCount, "/", len(LAYOUT_SEED), "reached target"
   return games #+ reversedGames
-=======
 
 
   #Now, reverse the index on the team, and run the games again
@@ -785,21 +783,21 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
     g = rules.newGame( l, agents, gameDisplay, length, muteAgents, catchExceptions )
     g.run()
     if not beQuiet: reversedGames.append(g)
-  
+
   print ""
   print "Preliminary Phase 3 Autograder Results:"
   passed = 0
   # Output
   print "Regular order"
-  for i, game in enumerate(games): 
+  for i, game in enumerate(games):
     myTime = game.length - game.state.data.timeleft
     targetTime = baselineScores[i]
     if myTime < targetTime:
       passed += 1
     print "Game", i, ": ", "-l RANDOM%d  "%LAYOUT_SEED[i], "\tTime taken:", myTime, "\tTarget time:", targetTime
-  
+
   print "Reversed order"
-  for i, game in enumerate(reversedGames): 
+  for i, game in enumerate(reversedGames):
     myTime = game.length - game.state.data.timeleft
     targetTime = baselineScores[i]
     if myTime < targetTime:
@@ -807,7 +805,6 @@ def runGames(layouts, agents, display, length, numGames, record, numTraining, pa
     print "Game", i, ": ", "-l RANDOM%d  "%LAYOUT_SEED[i], "\tTime taken:", myTime, "\tTarget time:", targetTime
   print  "Summary: ", passed, "/", 2*len(LAYOUT_SEED), "reached target"
   return games + reversedGames
->>>>>>> 7e4aad630213ebb4869d446997b83ed530a076e5
 
 
 
