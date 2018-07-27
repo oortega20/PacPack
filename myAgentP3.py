@@ -53,8 +53,9 @@ class myAgentP3(CaptureAgent):
     self.start = gameState.getAgentPosition(self.index)
     self.t_index = list(filter(lambda index: index == self.index, gameState.getPacmanTeamIndices()))[0]
     self.start_dots = len(gameState.getFood().asList())
-
-
+    self.reroute = 0
+    self.problem_dot = None
+    self.random_dot = None
 
   #returns the optimal plan gor
   def mini_max(self, state, teammate_plan, plan_so_far, player, depth, alpha, beta):
@@ -72,9 +73,11 @@ class myAgentP3(CaptureAgent):
   def maximize(self, state, teammate_plan, plan_so_far, player, depth, alpha, beta):
     my_pacman = self.index
     max_node = [float("-inf"), plan_so_far]
-    actions = actionsWithoutStop(state.getLegalActions(player))
+    if player == my_pacman:
+        actions = actionsWithoutStop(state.getLegalActions(player))
+    else:
 
-
+        actions = actionsWithoutReverse(actionsWithoutStop(state.getLegalActions(player)), state,player)
     successors = ([state.generateSuccessor(player, a), a] for a in actions)
     for s,a in successors:
         next_player = (player + 1) % state.getNumAgents()
@@ -91,8 +94,8 @@ class myAgentP3(CaptureAgent):
 
   def minimize(self, state, teammate_plan, plan_so_far, player, depth, alpha, beta):
     min_node = [float("inf"), plan_so_far]
-    actions =  actionsWithoutStop(state.getLegalActions(player))
-    successors = [[state.generateSuccessor(player, a), [a] + plan_so_far] for a in actions]
+    actions =  actionsWithoutReverse(actionsWithoutStop(state.getLegalActions(player)), state, player)
+    successors = ([state.generateSuccessor(player, a), plan_so_far] for a in actions)
     for s,a in successors:
         n_player = (player + 1) % state.getNumAgents()
         c_node = self.mini_max(s, teammate_plan, plan_so_far, n_player, depth - 1, alpha, beta)
@@ -114,27 +117,46 @@ class myAgentP3(CaptureAgent):
             if oldFood[x][y] and not (x,y) in teammates_plan:
                 f_dots.append((x,y))
 
-    foodDistances = [self.getMazeDistance(pos, foodPosition) for foodPosition in f_dots]
-    closestFood = float(1) / float(min( foodDistances ) + 1.0)
 
     ghostPositions = [state.getAgentPosition(ghostIndex) for ghostIndex in self.getOpponents(state)]
     ghostDistances = [self.getMazeDistance(pos, ghostPosition) for ghostPosition in ghostPositions]
     ghostDistances.append( 1000 )
-    if min(ghostDistances) < 3:
-        closestGhost = float(1.4) / float(min( ghostDistances ) + 1)
-    else:
-        closestGhost = 0
-    score = self.getScore(state)
-    closestFriend = float(0.2) /  float(self.getMazeDistance(pos, state.getAgentPosition(self.t_index)) + 1.0)
 
-    numRepeats = sum([1 for x in self.observationHistory[-20:] if x.getAgentPosition(self.index) == pos])
-    #try spreading out if stuck?? idk if you have any ideas
-    if numRepeats > 2:
-        numRepeats  *= 10
-    else:
-        numRepeats = 0
+    if self.reroute == 0:
+        f_dots.sort(key = lambda dot: self.getMazeDistance(pos, dot))
+        min_dot = self.getMazeDistance(f_dots[0], pos)
+        closestFood = float(1) / float(min_dot  + 1.0)
+        if min(ghostDistances) < 3:
+            closestGhost = float(0.025) / float(min( ghostDistances ) + 1)
+        else :
+            closestGhost = 0
+        score = self.getScore(state)
+        closestFriend = float(5) /  float(self.getMazeDistance(pos, state.getAgentPosition(self.t_index)) + 1.0)
 
-    return closestFood + score - closestGhost - numRepeats - closestFriend
+        numRepeats = sum([1 for x in self.observationHistory[-20:] if x.getAgentPosition(self.index) == pos])
+        #try spreading out if stuck?? idk if you have any ideas
+        if numRepeats > 4:
+            f_dots.sort(key = lambda dot: self.getMazeDistance(pos, dot))
+            self.problem_dot = f_dots[0]
+            random.shuffle(f_dots)
+            self.random_dot = f_dots[0]
+            self.reroute += 100
+        return closestFood + score - closestGhost - closestFriend
+    else:
+        print(self.reroute)
+        self.reroute -= 1
+        #go to dot thats furthest away for a bit to guarantee you don't get
+        #stuck trying to reach for another dot
+        f_dots.sort()
+        new_dot = f_dots[0]
+        min_dot = self.getMazeDistance(self.random_dot, pos)
+        closestFood = float(1) / float(min_dot  + 1.0)
+        closestGhost = float(0.001) / float(min( ghostDistances ) + 1)
+
+        score = self.getScore(state)
+        closestFriend = float(10) /  float(self.getMazeDistance(pos, state.getAgentPosition(self.t_index)) + 1.0)
+        return closestFood + score - closestGhost - closestFriend
+
   def chooseAction(self, gameState):
     """
     Picks among actions randomly.
